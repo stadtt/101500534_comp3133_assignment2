@@ -21,5 +21,16 @@ export const routes: Routes = [
         path: 'employee-list',
         pathMatch: 'full',
         loadComponent: () => import('./components/employee-list/employee-list').then(m => m.EmployeeList)
+    },
+    {
+        path:"create-employee",
+        pathMatch: 'full',
+        loadComponent: () => import('./components/create-employee/create-employee').then(m => m.CreateEmployee)
+    },
+    {
+        path:"edit-employee/:id",
+        pathMatch: 'full',
+        loadComponent: () => import('./components/edit-employee/edit-employee').then(m => m.EditEmployee)
     }
+    
 ];
