@@ -53,7 +53,7 @@ const typeDefs = `
                 salary: Float
                 date_of_joining: String
                 department: String
-                image: String
+                employee_photo: String
             ): Employee
 
             updateEmployee(
@@ -66,7 +66,7 @@ const typeDefs = `
                 salary: Float
                 date_of_joining: String
                 department: String
-                image: String
+                employee_photo: String
             ): Employee
 
             deleteEmployee(_id: ID!): Employee
@@ -89,7 +89,7 @@ const typeDefs = `
             salary: Float
             date_of_joining: String
             department: String
-            image: String
+            employee_photo: String
         }
 `
 
@@ -177,7 +177,7 @@ const resolvers = {
                     salary: args.salary,
                     date_of_joining: args.date_of_joining,
                     department: args.department,
-                    image: args.image
+                    employee_photo: args.employee_photo
                 })
 
                 return await newEmployee.save()
@@ -197,7 +197,7 @@ const resolvers = {
                     salary: args.salary,
                     date_of_joining: args.date_of_joining,
                     department: args.department,
-                    image: args.image
+                    employee_photo: args.employee_photo
                 }
 
                 Object.keys(updateFields).forEach((key) => {
