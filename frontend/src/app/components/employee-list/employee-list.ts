@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { Header } from '../header/header';
 import { EmployeeService } from '../../service/employee.service';
-import { Employee } from '../../models/emplotee.type';
+import { Employee } from '../../models/employee.type';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-list',
@@ -12,6 +13,7 @@ import { Employee } from '../../models/emplotee.type';
 export class EmployeeList {
   employeeService = inject(EmployeeService);
   employees = signal<Array<Employee>>([]);
+  router = inject(Router);
 
   ngOnInit() {
     this.employeeService.GetAllEmployees()
@@ -26,7 +28,7 @@ export class EmployeeList {
   }
 
   editEmployee(employeeId: number) {
-    console.log('Edit employee with ID:', employeeId);
+    this.router.navigate(['/edit-employee', employeeId]);
   }
 
   deleteEmployee(employeeId: number) {

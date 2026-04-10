@@ -1,1 +1,55 @@
-<p>edit-employee works!</p>
+<app-header></app-header>
+
+<form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" formControlName="first_name" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" formControlName="last_name" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" formControlName="email" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select id="gender" formControlName="gender" class="form-control" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="designation">Designation:</label>
+        <input type="text" id="designation" formControlName="designation" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="salary">Salary:</label>
+        <input type="number" id="salary" formControlName="salary" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="date_of_joining">Date of Joining:</label>
+        <input type="date" id="date_of_joining" formControlName="date_of_joining" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="department">Department:</label>
+        <input id="department" formControlName="department" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="employee_photo">Employee Photo URL:</label>
+        <input type="text" id="employee_photo" formControlName="employee_photo" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Employee</button>
+</form>
