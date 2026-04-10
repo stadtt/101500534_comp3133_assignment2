@@ -89,15 +89,18 @@ const schema = buildSchema(`
 
 const root = {
         
-       loginUser : async (args) => {
+      loginUser : async (args) => {
 
         try {
-            const user = await UserModel.findOne({ username: args.username });
+          const username = args.username.trim().toLowerCase();
+          const user = await UserModel.findOne({ username }).select('+password');
             if (!user) return null;
 
              if(user.password == args.password){
                 return user
              }
+
+          return null;
 
         }catch(error){
                 console.log(`Error logging in : ${error.message}`)
@@ -147,7 +150,7 @@ const root = {
 
 
         ,
-        signupUser : async () => {
+        signupUser : async (args) => {
             try{
             const newUser = await new UserModel({
                 
