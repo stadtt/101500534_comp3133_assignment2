@@ -27,12 +27,13 @@ export class AdminView {
 
   editEmployee(employeeId: number) {
     console.log('Edit employee with ID:', employeeId);
-    // Implement edit functionality here
   }
 
   deleteEmployee(employeeId: number) {
     console.log('Delete employee with ID:', employeeId);
-    // Implement delete functionality here
+   
   }
-
+  addEmployee() {
+    console.log('Add new employee');
+  }
 }

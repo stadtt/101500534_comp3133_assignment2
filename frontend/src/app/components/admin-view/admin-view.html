@@ -1,17 +1,20 @@
 <app-header></app-header>
 
 
-
-<table class="table-auto">
+<section class="bg-slate-100 px-4 py-8">
+<div class="mx-auto w-full max-w-6xl overflow-x-auto rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+  <h2 class="mb-6 text-center text-xl font-semibold text-blue-900">Employee List</h2>
+<table class="min-w-full border-collapse text-left text-sm text-slate-700">
     <thead>
-  <tr>
-    <th>First Name</th>
-    <th>Last Name</th>
-    <th>Email</th>
-    <th>Gender</th>
-    <th>Designation</th>
-    <th>Salary</th>
-    <th>Department</th>
+  <tr class="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-600">
+    <th class="px-4 py-3">First Name</th>
+    <th class="px-4 py-3">Last Name</th>
+    <th class="px-4 py-3">Email</th>
+    <th class="px-4 py-3">Gender</th>
+    <th class="px-4 py-3">Designation</th>
+    <th class="px-4 py-3">Salary</th>
+    <th class="px-4 py-3">Department</th>
+    <th class="px-4 py-3">Actions</th>
   </tr> 
   </thead>
   <tbody>
@@ -19,27 +22,32 @@
 
 
 @for (employee of employees(); track employee._id) {
-  <tr>
-    <td>{{ employee.first_name }}</td>
-    <td>{{ employee.last_name }}</td>
-    <td>{{ employee.email }}</td>
-    <td>{{ employee.gender }}</td>
-    <td>{{ employee.designation }}</td>
-    <td>{{ employee.salary }}</td>
-    <td>{{ employee.department }}</td>
-    <td>
-      <button class="rounded bg-blue-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-800" (click)="editEmployee(employee._id)">
+  <tr class="border-b border-slate-100 even:bg-slate-50 odd:bg-white hover:bg-blue-50/50">
+    <td class="px-4 py-3">{{ employee.first_name }}</td>
+    <td class="px-4 py-3">{{ employee.last_name }}</td>
+    <td class="px-4 py-3">{{ employee.email }}</td>
+    <td class="px-4 py-3">{{ employee.gender }}</td>
+    <td class="px-4 py-3">{{ employee.designation }}</td>
+    <td class="px-4 py-3">{{ employee.salary }}</td>
+    <td class="px-4 py-3">{{ employee.department }}</td>
+    <td class="px-4 py-3">
+      <div class="flex items-center gap-2">
+      <button class="rounded bg-blue-900 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-blue-800" (click)="editEmployee(employee._id)">
         Edit
       </button>
-      <button class="rounded bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-500" (click)="deleteEmployee(employee._id)">
+      <button class="rounded bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-red-500" (click)="deleteEmployee(employee._id)">
         Delete
       </button>
+      </div>
     </td>
   </tr> 
 } @empty {
   <tr>
-    <td colspan="7">No employees found.</td>
+    <td colspan="8" class="px-4 py-6 text-center text-slate-500">No employees found.</td>
   </tr>
 }
     </tbody>
 </table>
+</div>
+</section>
+
