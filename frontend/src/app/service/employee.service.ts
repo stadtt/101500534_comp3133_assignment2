@@ -19,7 +19,7 @@ export class EmployeeService {
         query: gql`
           query GetAllEmployees {
             getAllEmployees {
-              id
+              _id
               first_name
               last_name
               email
