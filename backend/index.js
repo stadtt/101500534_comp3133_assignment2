@@ -1,9 +1,10 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 require("dotenv").config()
 
-const { buildSchema } = require('graphql')
-const { createHandler } = require('graphql-http/lib/use/express')
+const { ApolloServer } = require('@apollo/server')
+const { expressMiddleware } = require('@as-integrations/express5')
 
 const UserModel = require("./model/Users")
 const EmployeeModel = require("./model/Employee")
@@ -11,22 +12,26 @@ const EmployeeModel = require("./model/Employee")
 const app = express()
 const PORT = 4000
 
+app.use(cors({
+    origin: 'http://localhost:4200',
+    credentials: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}))
+
 const connectDB = async() => {
-    try{
-        console.log(`Attempting to connect to DB`);
+    try {
+        console.log('Attempting to connect to DB')
         const DB_CONNECTION = process.env.DB_CONNECTION
-        mongoose.connect(DB_CONNECTION).then( () => {
-            console.log(`MongoDB connected`)
-        }).catch( (err) => {
-            console.log(`Error while connecting to MongoDB : ${JSON.stringify(err)}`)
-        });
-    }catch(error){
-        console.log(`Unable to connect to DB : ${error.message}`);
-        
+        await mongoose.connect(DB_CONNECTION)
+        console.log('MongoDB connected')
+    } catch (error) {
+        console.log(`Unable to connect to DB : ${error.message}`)
+        throw error
     }
 }
-//Schema
-const schema = buildSchema(`
+
+const typeDefs = `
         type Query {
             loginUser(username: String!, password: String!): User
             getAllEmployees: [Employee]
@@ -48,6 +53,7 @@ const schema = buildSchema(`
                 salary: Float
                 date_of_joining: String
                 department: String
+                image: String
             ): Employee
 
             updateEmployee(
@@ -60,6 +66,7 @@ const schema = buildSchema(`
                 salary: Float
                 date_of_joining: String
                 department: String
+                image: String
             ): Employee
 
             deleteEmployee(_id: ID!): Employee
@@ -82,162 +89,162 @@ const schema = buildSchema(`
             salary: Float
             date_of_joining: String
             department: String
+            image: String
         }
-`)
+`
 
+const resolvers = {
+    Query: {
+        loginUser: async (_, args) => {
+            try {
+                const username = args.username.trim().toLowerCase()
+                const user = await UserModel.findOne({ username }).select('+password')
+                if (!user) return null
 
+                if (user.password === args.password) {
+                    return user
+                }
 
-const root = {
-        
-      loginUser : async (args) => {
-
-        try {
-          const username = args.username.trim().toLowerCase();
-          const user = await UserModel.findOne({ username }).select('+password');
-            if (!user) return null;
-
-             if(user.password == args.password){
-                return user
-             }
-
-          return null;
-
-        }catch(error){
+                return null
+            } catch (error) {
                 console.log(`Error logging in : ${error.message}`)
-            return null
-
-        }
-       },
-        getAllEmployees: async () => {
-
-        try{
-            const Employees = await EmployeeModel.find()
-            return Employees
-        }catch(error){
-            console.log(`Error while fetching Employees : ${error.message}`)
-            return []
-        }
-
-
+                return null
+            }
         },
-        getEmployeeById: async (args)  => {
-             try{
-                const Employee = await EmployeeModel.findOne({_id: args._id})
-                return Employee
-            }  catch(error){
+        getAllEmployees: async () => {
+            try {
+                return await EmployeeModel.find()
+            } catch (error) {
+                console.log(`Error while fetching Employees : ${error.message}`)
+                return []
+            }
+        },
+        getEmployeeById: async (_, args) => {
+            try {
+                return await EmployeeModel.findById(args._id)
+            } catch (error) {
                 console.log(`Error while fetching Employee : ${error.message}`)
-            return null
-        }
-
+                return null
+            }
         },
         searchEmployee: async (_, args) => {
-        try {
-            const { designation, department } = args;
+            try {
+                const { designation, department } = args
+                const filters = []
 
-            const Employee = await EmployeeModel.findOne({
-            $or: [
-                ...(designation ? [{ designation }] : []),
-                ...(department ? [{ department }] : [])
-            ]
-            });
+                if (designation) {
+                    filters.push({ designation })
+                }
+                if (department) {
+                    filters.push({ department })
+                }
 
-            return Employee;
-        } catch (error) {
-            console.log(`Error while fetching Employee: ${error.message}`);
-            return null;
+                if (filters.length === 0) {
+                    return await EmployeeModel.find()
+                }
+
+                return await EmployeeModel.find({ $or: filters })
+            } catch (error) {
+                console.log(`Error while fetching Employee: ${error.message}`)
+                return []
             }
         }
-
-
-        ,
-        signupUser : async (args) => {
-            try{
-            const newUser = await new UserModel({
-                
-                username: args.username,
-                password: args.password,
-                email: args.email
-            })
-            const savedUser = await newUser.save()
-            return savedUser
-        }catch(error){
-            console.log(`Error while creating user : ${error.message}`)
-            return null
-        }
-
-        },
-        addEmployee : async (args) => {
-            try{
-                const newEmployee = await new EmployeeModel({
-                    first_name: args.first_name,
-                    last_name: args.last_name,
-                    email: args.email,
-                    gender: args.gender,
-                    designation: args.designation,
-                    salary: args.salary,
-                    department: args.department
-
+    },
+    Mutation: {
+        signupUser: async (_, args) => {
+            try {
+                const newUser = new UserModel({
+                    username: args.username,
+                    password: args.password,
+                    email: args.email
                 })
 
-            }catch(error){
-                     console.log(`Error while creating employee : ${error.message}`)
-            return null
+                const savedUser = await newUser.save()
+                return savedUser
+            } catch (error) {
+                console.log(`Error while creating user : ${error.message}`)
+                return null
             }
-
         },
-        updateEmployee : async(args) => {
-
-              try{
-                const UpdateEmployee = await EmployeeModel.findOneAndUpdate(
-                {_id: args._id},
-                {
-                    $set: {
+        addEmployee: async (_, args) => {
+            try {
+                const newEmployee = new EmployeeModel({
                     first_name: args.first_name,
                     last_name: args.last_name,
                     email: args.email,
                     gender: args.gender,
                     designation: args.designation,
                     salary: args.salary,
-                    department: args.department
-                    }
+                    date_of_joining: args.date_of_joining,
+                    department: args.department,
+                    image: args.image
+                })
 
-                },
-                {new: true}
-            )
-            return UpdateEmployee
-            }catch(error){
-                     console.log(`Error while Updating Employee : ${error.message}`)
-            return null
+                return await newEmployee.save()
+            } catch (error) {
+                console.log(`Error while creating employee : ${error.message}`)
+                return null
             }
-
         },
-        deleteEmployee : async (args) => {
-        try{
-            const deletedEmployee = await EmployeeModel.findByIdAndDelete(args._id)
-            return deletedEmployee
-        }catch(error){
-            console.log(`Error while deleting Employee : ${error.message}`)
-            return null
+        updateEmployee: async (_, args) => {
+            try {
+                const updateFields = {
+                    first_name: args.first_name,
+                    last_name: args.last_name,
+                    email: args.email,
+                    gender: args.gender,
+                    designation: args.designation,
+                    salary: args.salary,
+                    date_of_joining: args.date_of_joining,
+                    department: args.department,
+                    image: args.image
+                }
+
+                Object.keys(updateFields).forEach((key) => {
+                    if (updateFields[key] === undefined) {
+                        delete updateFields[key]
+                    }
+                })
+
+                return await EmployeeModel.findOneAndUpdate(
+                    { _id: args._id },
+                    { $set: updateFields },
+                    { new: true }
+                )
+            } catch (error) {
+                console.log(`Error while Updating Employee : ${error.message}`)
+                return null
+            }
+        },
+        deleteEmployee: async (_, args) => {
+            try {
+                return await EmployeeModel.findByIdAndDelete(args._id)
+            } catch (error) {
+                console.log(`Error while deleting Employee : ${error.message}`)
+                return null
+            }
         }
-
-
-        }
-
+    }
 }
 
+const startServer = async () => {
+    await connectDB()
 
-app.all(
-  '/graphql',
-  createHandler({
-    schema: schema,
-    rootValue: root,
-  }),
-);
+    const server = new ApolloServer({
+        typeDefs,
+        resolvers
+    })
 
+    await server.start()
 
+    app.use('/graphql', express.json(), expressMiddleware(server))
 
-app.listen(PORT, () =>{
-    connectDB()
-    console.log("GraphQL Server started")
-    console.log("http://localhost:4000/graphql")
+    app.listen(PORT, () => {
+        console.log('GraphQL Server started')
+        console.log(`http://localhost:${PORT}/graphql`)
+    })
+}
+
+startServer().catch((error) => {
+    console.log(`Server startup failed: ${error.message}`)
 })

@@ -71,10 +71,12 @@ const empSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
   },
-//   image: {
-//         type: String,  
-//         default: null,
-//     },
+    image: {
+        type: String,
+        trim: true,
+        default: null,
+        match: [/^https:\/\/res\.cloudinary\.com\/.+$/i, "Image must be a valid Cloudinary URL"],
+    },
 
 })
 
