@@ -134,6 +134,71 @@ export class EmployeeService {
       .pipe(map((result: any) => result?.data?.updateEmployee ?? null));
   }
 
-}
-      
+  addEmployee(first_name: string, last_name: string, email: string, gender: string, designation: string, salary: number,
+     date_of_joining: string, department: string, employee_photo: string): Observable<any> {
+    return this.apollo
+      .mutate({
+        mutation: gql`
+          mutation AddEmployee(
+            $first_name: String!
+            $last_name: String!
+            $email: String!
+            $gender: String!
+            $designation: String!
+            $salary: Float!
+            $date_of_joining: String!
+            $department: String!
+            $employee_photo: String!
+          ) {
+            addEmployee(
+              first_name: $first_name
+              last_name: $last_name
+              email: $email
+              gender: $gender
+              designation: $designation
+              salary: $salary
+              date_of_joining: $date_of_joining
+              department: $department
+              employee_photo: $employee_photo
+            )
+          }
+        `,
+        variables: {
+          first_name: first_name,
+          last_name: last_name,
+          email: email,
+          gender: gender,
+          designation: designation,
+          salary: salary,
+          date_of_joining: date_of_joining,
+          department: department,
+          employee_photo: employee_photo
+        },
+        context: {
+          uri: this.fullUrl,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      .pipe(map((result: any) => result?.data?.addEmployee ?? null));
+  }
+  
+  deleteEmployee(id: string): Observable<any> { 
+    return this.apollo
+      .mutate({
+        mutation: gql`
+          mutation DeleteEmployee($_id: ID!) {
+            deleteEmployee(_id: $_id)
+          }
+        `,
+        variables: {
+          _id: id,
+        },
+        context: {
+          uri: this.fullUrl,
+        },
+        fetchPolicy: 'no-cache',
+      })    
 
+    }
+  }
+  
