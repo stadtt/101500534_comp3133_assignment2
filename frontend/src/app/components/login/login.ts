@@ -20,7 +20,6 @@ export class Login {
   });
 
   onSubmit() {
-    console.log('Login submit clicked');
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -37,6 +36,7 @@ export class Login {
             return;
           }
           console.log('Logged in user:', user);
+          
         },
         error: (error) => {
           console.error('Login error:', error);
