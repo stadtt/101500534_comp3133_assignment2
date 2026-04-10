@@ -39,6 +39,7 @@ export class CreateEmployee {
     }
 
     const newEmployee = this.employeeForm.getRawValue();
+    console.log('Creating employee with data:', newEmployee);
     
     this.employeeService.addEmployee(
       newEmployee.first_name,
