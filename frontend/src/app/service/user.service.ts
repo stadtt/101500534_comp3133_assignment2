@@ -37,4 +37,28 @@ export class UserService {
       })
       .pipe(map((result: any) => result?.data?.loginUser ?? null));
   }
+  SignupUser(email: string, username: string, password: string): Observable<any> {
+    return this.apollo
+      .mutate({
+        mutation: gql`
+          mutation SignupUser($username: String!, $password: String!, $email: String!) {
+            signupUser(username: $username, password: $password, email: $email) {
+              id
+              username
+              email
+            }
+          }
+        `,
+        variables: {
+          email,
+          username,
+          password,
+        },
+        context: {
+          uri: this.fullUrl,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      .pipe(map((result: any) => result?.data?.signupUser ?? null));
+  }
 }
