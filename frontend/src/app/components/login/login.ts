@@ -44,7 +44,7 @@ export class Login {
             return;
           }
           console.log('Logged in user:', user);
-          this.router.navigate(['/admin-view']);
+          this.router.navigate(['/employee-list']);
           
         },
         error: (error) => {

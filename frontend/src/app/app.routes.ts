@@ -18,8 +18,8 @@ export const routes: Routes = [
         loadComponent: () => import('./components/signup/signup').then(m => m.Signup)
     },
     {
-        path: 'admin-view',
+        path: 'employee-list',
         pathMatch: 'full',
-        loadComponent: () => import('./components/admin-view/admin-view').then(m => m.AdminView)
+        loadComponent: () => import('./components/employee-list/employee-list').then(m => m.EmployeeList)
     }
 ];

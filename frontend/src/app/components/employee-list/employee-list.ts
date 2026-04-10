@@ -4,12 +4,12 @@ import { EmployeeService } from '../../service/employee.service';
 import { Employee } from '../../models/emplotee.type';
 
 @Component({
-  selector: 'app-admin-view',
+  selector: 'app-employee-list',
   imports: [Header],
-  templateUrl: './admin-view.html',
-  styleUrl: './admin-view.css',
+  templateUrl: './employee-list.html',
+  styleUrl: './employee-list.css',
 })
-export class AdminView {
+export class EmployeeList {
   employeeService = inject(EmployeeService);
   employees = signal<Array<Employee>>([]);
 
