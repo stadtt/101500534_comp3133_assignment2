@@ -3,6 +3,7 @@ import { Header } from '../header/header';
 import { Employee } from '../../models/employee.type';
 import { EmployeeService } from '../../service/employee.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-employee',
@@ -12,6 +13,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 export class CreateEmployee {
 
+  router = inject(Router);
   employeeService = inject(EmployeeService);
   employee = signal<Employee>({} as Employee);
 
@@ -53,8 +55,13 @@ export class CreateEmployee {
       newEmployee.employee_photo
     ).subscribe({
       next: (employee) => {
-        console.log('Employee created successfully:', employee);
-        this.employee.set(employee);
+        if(employee) {
+          console.log('Employee created successfully:', employee);
+          this.router.navigate(['/employee-list']);
+          return;
+        }
+
+        this.errorMessage = 'Failed to create employee. Please try again.';
       },
       error: (error) => {
         console.error('Error creating employee:', error);

@@ -140,28 +140,39 @@ export class EmployeeService {
       .mutate({
         mutation: gql`
           mutation addEmployee(
-            $first_name: String!
-            $last_name: String!
-            $email: String!
-            $gender: String!
-            $designation: String!
-            $salary: Float!
-            $date_of_joining: String!
-            $department: String!
-            $employee_photo: String!
-          ) {
-            addEmployee(
-              first_name: $first_name
-              last_name: $last_name
-              email: $email
-              gender: $gender
-              designation: $designation
-              salary: $salary
-              date_of_joining: $date_of_joining
-              department: $department
-              employee_photo: $employee_photo
-            )
-          }
+              $first_name: String!
+              $last_name: String!
+              $email: String!
+              $gender: String!
+              $designation: String!
+              $salary: Float!
+              $date_of_joining: String!
+              $department: String!
+              $employee_photo: String!
+            ) {
+              addEmployee(
+                first_name: $first_name
+                last_name: $last_name
+                email: $email
+                gender: $gender
+                designation: $designation
+                salary: $salary
+                date_of_joining: $date_of_joining
+                department: $department
+                employee_photo: $employee_photo
+              ) {
+                _id
+                first_name
+                last_name
+                email
+                gender
+                designation
+                salary
+                date_of_joining
+                department
+                employee_photo
+              }
+            }
         `,
         variables: {
           first_name: first_name,
@@ -188,6 +199,14 @@ export class EmployeeService {
         mutation: gql`
           mutation DeleteEmployee($_id: ID!) {
             deleteEmployee(_id: $_id)
+            {
+              _id
+              first_name
+              last_name
+              email
+              designation
+              department
+              }
           }
         `,
         variables: {
@@ -198,6 +217,7 @@ export class EmployeeService {
         },
         fetchPolicy: 'no-cache',
       })    
+      .pipe(map((result: any) => result?.data?.deleteEmployee ?? null));
 
     }
   }

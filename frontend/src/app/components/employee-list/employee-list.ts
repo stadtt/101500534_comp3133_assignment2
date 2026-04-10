@@ -27,16 +27,24 @@ export class EmployeeList {
     });
   }
 
-  editEmployee(employeeId: number) {
+  editEmployee(employeeId: string) {
     this.router.navigate(['/edit-employee', employeeId]);
   }
 
-  deleteEmployee(employeeId: number) {
+  deleteEmployee(employeeId: string) {
     console.log('Delete employee with ID:', employeeId);
-    this.employeeService.deleteEmployee(employeeId.toString()).subscribe({
+    this.employeeService.deleteEmployee(employeeId).subscribe({
       next: () => {
-        // Remove the employee from the list
-        this.employees.set(this.employees().filter(emp => emp._id !== employeeId));
+        console.log('Employee deleted successfully');
+        // Refresh the employee list after deletion
+        this.employeeService.GetAllEmployees().subscribe({
+          next: (employees) => {
+            this.employees.set(employees);
+          },
+          error: (error) => {
+            console.error('Error fetching employees after deletion:', error);
+          }
+        });
       },
       error: (error) => {
         console.error('Error deleting employee:', error);
@@ -45,7 +53,7 @@ export class EmployeeList {
 
   }
 
-  ViewEmployee(employeeId: number) {
+  ViewEmployee(employeeId: string) {
     //pop a modal
   }
   addEmployee() {
