@@ -33,9 +33,22 @@ export class EmployeeList {
 
   deleteEmployee(employeeId: number) {
     console.log('Delete employee with ID:', employeeId);
-   
+    this.employeeService.deleteEmployee(employeeId.toString()).subscribe({
+      next: () => {
+        // Remove the employee from the list
+        this.employees.set(this.employees().filter(emp => emp._id !== employeeId));
+      },
+      error: (error) => {
+        console.error('Error deleting employee:', error);
+      }
+    });
+
+  }
+
+  ViewEmployee(employeeId: number) {
+    //pop a modal
   }
   addEmployee() {
-    console.log('Add new employee');
+    this.router.navigate(['/create-employee']);
   }
 }

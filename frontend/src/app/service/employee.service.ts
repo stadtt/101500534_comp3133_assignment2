@@ -139,7 +139,7 @@ export class EmployeeService {
     return this.apollo
       .mutate({
         mutation: gql`
-          mutation AddEmployee(
+          mutation addEmployee(
             $first_name: String!
             $last_name: String!
             $email: String!
@@ -181,7 +181,7 @@ export class EmployeeService {
       })
       .pipe(map((result: any) => result?.data?.addEmployee ?? null));
   }
-  
+
   deleteEmployee(id: string): Observable<any> { 
     return this.apollo
       .mutate({
