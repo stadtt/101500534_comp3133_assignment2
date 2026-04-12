@@ -31,6 +31,11 @@ export const routes: Routes = [
         path:"edit-employee/:id",
         pathMatch: 'full',
         loadComponent: () => import('./components/edit-employee/edit-employee').then(m => m.EditEmployee)
+    },
+    {
+        path:"view-employee/:id",
+        pathMatch: 'full',
+        loadComponent: () => import('./components/view-employee/view-employee').then(m => m.ViewEmployee)
     }
     
 ];

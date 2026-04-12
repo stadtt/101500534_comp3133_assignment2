@@ -85,6 +85,9 @@ export class EditEmployee {
       });
     }
   }
+  backToList(): void {
+    window.history.back();
+  }
 
 }
 

@@ -1,0 +1,81 @@
+<app-header></app-header>
+
+<section class="bg-slate-100 px-4 py-10">
+    <div class="mx-auto w-full max-w-3xl rounded border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="mb-6 text-center">
+            <h2 class="text-xl font-semibold text-blue-900">View Employee</h2>
+        </div>
+
+        <div class="space-y-5">
+            <div class="grid gap-5 md:grid-cols-2">
+                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">First Name</p>
+                    <p class="mt-1 text-sm text-slate-900">{{ employee().first_name || '-' }}</p>
+                </div>
+
+                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Last Name</p>
+                    <p class="mt-1 text-sm text-slate-900">{{ employee().last_name || '-' }}</p>
+                </div>
+            </div>
+
+            <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Email</p>
+                <p class="mt-1 text-sm text-slate-900">{{ employee().email || '-' }}</p>
+            </div>
+
+            <div class="grid gap-5 md:grid-cols-2">
+                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Gender</p>
+                    <p class="mt-1 text-sm text-slate-900">{{ employee().gender || '-' }}</p>
+                </div>
+
+                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Salary</p>
+                    <p class="mt-1 text-sm text-slate-900">{{ employee().salary || '-' }}</p>
+                </div>
+            </div>
+
+            <div class="grid gap-5 md:grid-cols-2">
+                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Designation</p>
+                    <p class="mt-1 text-sm text-slate-900">{{ employee().designation || '-' }}</p>
+                </div>
+
+                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Department</p>
+                    <p class="mt-1 text-sm text-slate-900">{{ employee().department || '-' }}</p>
+                </div>
+            </div>
+
+            <div class="grid gap-5 md:grid-cols-2">
+                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Date of Joining</p>
+                    <p class="mt-1 text-sm text-slate-900">{{ employee().date_of_joining || '-' }}</p>
+                </div>
+
+                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Employee Photo URL</p>
+                    <p class="mt-1 break-all text-sm text-slate-900">{{ employee().employee_photo || '-' }}</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                <button
+                    type="button"
+                    (click)="backToList()"
+                    class="inline-flex items-center justify-center rounded bg-gray-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-500 disabled:cursor-not-allowed disabled:bg-slate-400"
+                >
+                    Back
+                </button>
+                <button
+                    type="button"
+                    (click)="backToEdit()"
+                    class="inline-flex items-center justify-center rounded bg-blue-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+                >
+                    Edit
+                </button>
+            </div>
+        </div>
+    </div>
+</section>

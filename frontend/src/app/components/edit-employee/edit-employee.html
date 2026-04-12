@@ -74,6 +74,13 @@
 
             <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
                 <button
+                    type="button"
+                    (click)="backToList()"
+                    class="inline-flex items-center justify-center rounded bg-gray-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-500 disabled:cursor-not-allowed disabled:bg-slate-400"
+                >
+                    Back
+                </button>
+                <button
                     type="submit"
                     [disabled]="employeeForm.invalid"
                     class="inline-flex items-center justify-center rounded bg-blue-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:bg-slate-400"

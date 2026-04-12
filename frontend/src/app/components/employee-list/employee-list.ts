@@ -53,8 +53,9 @@ export class EmployeeList {
 
   }
 
-  ViewEmployee(employeeId: string) {
-    //pop a modal
+  viewEmployee(employeeId: string) {
+  
+    this.router.navigate(['/view-employee', employeeId]);
   }
   addEmployee() {
     this.router.navigate(['/create-employee']);
