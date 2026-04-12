@@ -14,8 +14,20 @@ const app = express()
 const PORT = 4000
 const SALT_ROUNDS = 10
 
+const allowedOrigins = new Set([
+    'http://localhost:4200',
+    'http://127.0.0.1:4200'
+])
+
 app.use(cors({
-    origin: 'http://localhost:4200',
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.has(origin)) {
+            callback(null, true)
+            return
+        }
+
+        callback(new Error('CORS origin not allowed'))
+    },
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']

@@ -8,7 +8,7 @@ import { first, map } from 'rxjs/operators';
 export class EmployeeService {
 
   private PATH = "/graphql";
-  private HOST = "http://localhost:4000";
+  private HOST = "http://127.0.0.1:4000";
   private fullUrl = this.HOST + this.PATH;
 
   constructor(private apollo: Apollo) { }
