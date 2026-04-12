@@ -17,6 +17,7 @@ export class ViewEmployee {
   
   employeeService = inject(EmployeeService);
   employee = signal<Employee>({} as Employee);
+  imageLoadFailed = signal(false);
 
   backToList(): void {
     this.router.navigate(['/employee-list']);
@@ -29,12 +30,17 @@ export class ViewEmployee {
     }
   }
 
+  onImageError(): void {
+    this.imageLoadFailed.set(true);
+  }
+
   ngOnInit() {
     const employeeId = this.route.snapshot.paramMap.get('id');
     if (employeeId) {
       this.employeeService.getEmployeeById(employeeId).subscribe({
         next: (employee) => {
           this.employee.set(employee);
+          this.imageLoadFailed.set(false);
     
           console.log('Fetched employee:', employee);
         },

@@ -62,7 +62,17 @@
 
                 <div>
                     <label for="employee_photo" class="mb-1 block text-sm font-medium text-slate-700">Employee Photo URL</label>
-                    <input id="employee_photo" type="text" formControlName="employee_photo" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100">
+                    <input id="employee_photo" type="url" formControlName="employee_photo" placeholder="https://res.cloudinary.com/..." class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                    @if (employeeForm.controls.employee_photo.touched && employeeForm.controls.employee_photo.errors) {
+                        <div class="mt-1 text-sm text-red-600">
+                            @if (employeeForm.controls.employee_photo.hasError('required')) {
+                                Employee photo URL is required.
+                            }
+                            @if (employeeForm.controls.employee_photo.hasError('pattern')) {
+                                Enter a valid Cloudinary URL.
+                            }
+                        </div>
+                    }
                 </div>
             </div>
 

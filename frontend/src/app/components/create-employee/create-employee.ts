@@ -5,6 +5,8 @@ import { EmployeeService } from '../../service/employee.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
+const CLOUDINARY_URL_PATTERN = /^https:\/\/res\.cloudinary\.com\/.+/i;
+
 @Component({
   selector: 'app-create-employee',
   imports: [Header, ReactiveFormsModule],
@@ -28,7 +30,10 @@ export class CreateEmployee {
     salary: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
     date_of_joining: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     department: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    employee_photo: new FormControl('', { nonNullable: true, validators: [Validators.required] })
+    employee_photo: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.pattern(CLOUDINARY_URL_PATTERN)]
+    })
   });
 
   onSubmit() {
@@ -39,6 +44,7 @@ export class CreateEmployee {
       console.warn('Employee form is invalid:', this.employeeForm.getRawValue());
       return;
     }
+    
 
     const newEmployee = this.employeeForm.getRawValue();
     console.log('Creating employee with data:', newEmployee);

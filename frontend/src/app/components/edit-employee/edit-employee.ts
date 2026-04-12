@@ -1,9 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { EmployeeService } from '../../service/employee.service';
 import { Employee } from '../../models/employee.type';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Header } from '../header/header';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+
+const CLOUDINARY_URL_PATTERN = /^https:\/\/res\.cloudinary\.com\/.+/i;
 
 
 @Component({
@@ -17,6 +19,7 @@ export class EditEmployee {
   constructor(private  route: ActivatedRoute) {}
   
   employeeService = inject(EmployeeService);
+  router = inject(Router);
   employee = signal<Employee>({} as Employee);
 
   errorMessage = '';
@@ -30,7 +33,10 @@ export class EditEmployee {
     salary: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
     date_of_joining: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     department: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    employee_photo: new FormControl('', { nonNullable: true, validators: [Validators.required] })
+    employee_photo: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.pattern(CLOUDINARY_URL_PATTERN)]
+    })
   });
 
   onSubmit() {
@@ -60,7 +66,13 @@ export class EditEmployee {
       updatedEmployee.employee_photo
     ).subscribe({
       next: (employee) => {
+        if (!employee) {
+          this.errorMessage = 'Failed to update employee. Please try again.';
+          return;
+        }
+
         this.employee.set(employee);
+        this.router.navigate(['/view-employee', employee._id]);
       },
       error: (error) => {
         console.error('Error updating employee:', error);
