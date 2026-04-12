@@ -37,6 +37,9 @@ export class EmployeeList {
 
   deleteEmployee(employeeId: string) {
     console.log('Delete employee with ID:', employeeId);
+    if (!confirm('Are you sure you want to delete this employee?')) {
+      return;
+    }
     this.employeeService.deleteEmployee(employeeId).subscribe({
       next: () => {
         console.log('Employee deleted successfully');
