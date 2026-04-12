@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
+const bcrypt = require('bcrypt')
 require("dotenv").config()
 
 const { ApolloServer } = require('@apollo/server')
@@ -11,6 +12,7 @@ const EmployeeModel = require("./model/Employee")
 
 const app = express()
 const PORT = 4000
+const SALT_ROUNDS = 10
 
 app.use(cors({
     origin: 'http://localhost:4200',
@@ -101,11 +103,24 @@ const resolvers = {
                 const user = await UserModel.findOne({ username }).select('+password')
                 if (!user) return null
 
-                if (user.password === args.password) {
-                    return user
+                let isPasswordValid = false
+
+                if (typeof user.password === 'string' && user.password.startsWith('$2')) {
+                    isPasswordValid = await bcrypt.compare(args.password, user.password)
+                } else {
+                    // Support legacy plaintext passwords and migrate on successful login.
+                    isPasswordValid = user.password === args.password
+                    if (isPasswordValid) {
+                        user.password = await bcrypt.hash(args.password, SALT_ROUNDS)
+                        await user.save()
+                    }
                 }
 
-                return null
+                if (!isPasswordValid) return null
+
+                const userObject = user.toObject()
+                delete userObject.password
+                return userObject
             } catch (error) {
                 console.log(`Error logging in : ${error.message}`)
                 return null
@@ -153,9 +168,11 @@ const resolvers = {
     Mutation: {
         signupUser: async (_, args) => {
             try {
+                const hashedPassword = await bcrypt.hash(args.password, SALT_ROUNDS)
+
                 const newUser = new UserModel({
                     username: args.username,
-                    password: args.password,
+                    password: hashedPassword,
                     email: args.email
                 })
 
