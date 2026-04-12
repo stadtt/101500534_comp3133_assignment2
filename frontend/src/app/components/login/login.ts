@@ -20,8 +20,14 @@ export class Login {
   errorMessage = '';
 
   protected loginForm = new FormGroup({
-    username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    username: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3), Validators.maxLength(50)],
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(5)],
+    }),
   });
 
   onSubmit() {
@@ -35,7 +41,9 @@ export class Login {
 
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.getRawValue();
-      this.userService.LoginUser(username, password).subscribe({
+      const normalizedUsername = username.trim().toLowerCase();
+
+      this.userService.LoginUser(normalizedUsername, password).subscribe({
         next: (user) => {
           if (!user) {
             console.log('Login failed: invalid username or password');

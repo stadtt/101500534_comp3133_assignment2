@@ -11,20 +11,47 @@
         <input
           id="email"
           type="email"
+          autocomplete="email"
           placeholder="Enter your email"
           formControlName="email"
           class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-blue-700"
         >
+        @if (loginForm.controls.email.touched && loginForm.controls.email.errors) {
+          <div class="mt-1 text-sm text-red-600">
+            @if (loginForm.controls.email.hasError('required')) {
+              Email is required.
+            }
+            @if (loginForm.controls.email.hasError('email')) {
+              Enter a valid email address.
+            }
+          </div>
+        }
       </div>
       <div>
         <label for="username" class="mb-1 block text-sm font-medium text-slate-700">Username</label>
         <input
           id="username"
           type="text"
+          autocomplete="username"
+          minlength="3"
+          maxlength="50"
           placeholder="Enter your username"
           formControlName="username"
           class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-blue-700"
         >
+        @if (loginForm.controls.username.touched && loginForm.controls.username.errors) {
+          <div class="mt-1 text-sm text-red-600">
+            @if (loginForm.controls.username.hasError('required')) {
+              Username is required.
+            }
+            @if (loginForm.controls.username.hasError('minlength')) {
+              Username must be at least 3 characters.
+            }
+            @if (loginForm.controls.username.hasError('maxlength')) {
+              Username must be 50 characters or fewer.
+            }
+          </div>
+        }
       </div>
 
       <div>
@@ -32,10 +59,22 @@
         <input
           id="password"
           type="password"
+          autocomplete="new-password"
+          minlength="5"
           placeholder="Enter your password"
           formControlName="password"
           class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-blue-700"
         >
+        @if (loginForm.controls.password.touched && loginForm.controls.password.errors) {
+          <div class="mt-1 text-sm text-red-600">
+            @if (loginForm.controls.password.hasError('required')) {
+              Password is required.
+            }
+            @if (loginForm.controls.password.hasError('minlength')) {
+              Password must be at least 5 characters.
+            }
+          </div>
+        }
       </div>
 
       <button

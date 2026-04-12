@@ -18,9 +18,18 @@ export class Signup {
   errorMessage = '';
 
   protected loginForm = new FormGroup({
-    username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    username: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3), Validators.maxLength(50)],
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(5)],
+    }),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
   });
 
   onSubmit() {
@@ -34,18 +43,38 @@ export class Signup {
 
     if (this.loginForm.valid) {
       const { username, password, email } = this.loginForm.getRawValue();
-      this.userService.SignupUser(email, username, password).subscribe({
+      const normalizedUsername = username.trim().toLowerCase();
+      const normalizedEmail = email.trim().toLowerCase();
+
+      this.userService.SignupUser(normalizedEmail, normalizedUsername, password).subscribe({
         next: (result) => {
           if (result) {
             this.router.navigate(['/login']);
+            return;
           }
+
+          this.errorMessage = 'Signup failed. Please try again.';
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Error occurred while signing up:', err);
-          this.errorMessage = 'An error occurred while signing up. Please try again.';
+          this.errorMessage = this.getSignupErrorMessage(err);
+          this.cdr.detectChanges();
         }
       });
     }
+  }
+
+  private getSignupErrorMessage(error: any): string {
+    if (error?.networkError) {
+      return 'Unable to reach server. Please try again.';
+    }
+
+    if (error?.graphQLErrors?.length) {
+      return error.graphQLErrors[0].message || 'Signup failed. Please try again.';
+    }
+
+    return 'Signup failed. Please try again.';
   }
 
 }
