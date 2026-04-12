@@ -75,7 +75,7 @@ const empSchema = new mongoose.Schema({
         type: String,
         trim: true,
         default: null,
-        match: [/^https?:\/\/.+$/i, "Image must be a valid URL"],
+        match: [/^https:\/\/res\.cloudinary\.com\/.+$/i, "Image must be a valid Cloudinary URL"],
     },
 
 })
