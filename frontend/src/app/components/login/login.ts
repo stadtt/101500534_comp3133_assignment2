@@ -39,11 +39,15 @@ export class Login {
         next: (user) => {
           if (!user) {
             console.log('Login failed: invalid username or password');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('authUser');
             this.errorMessage = 'Invalid username or password';
             this.cdr.detectChanges();
             return;
           }
           console.log('Logged in user:', user);
+          localStorage.setItem('authToken', 'logged-in');
+          localStorage.setItem('authUser', JSON.stringify(user));
           this.router.navigate(['/employee-list']);
           
         },
