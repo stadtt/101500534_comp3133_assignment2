@@ -220,5 +220,63 @@ export class EmployeeService {
       .pipe(map((result: any) => result?.data?.deleteEmployee ?? null));
 
     }
-  }
-  
+    SearchEmployeeByDesignation(designation: string): Observable<any> {
+      return this.apollo
+        .query({
+          query: gql`
+            query SearchEmployee($designation: String!) {
+              searchEmployee(designation: $designation) {
+              _id
+              first_name
+              last_name
+              email
+              gender
+              designation
+              salary
+              date_of_joining
+              department
+              employee_photo
+      }
+            }
+          `,
+          variables: {
+            designation: designation,
+          },
+          context: {
+            uri: this.fullUrl,
+          },
+          fetchPolicy: 'no-cache',
+        })
+        .pipe(map((result: any) => result?.data?.searchEmployee ?? null));
+    }
+     SearchEmployeeByDepartment(department: string): Observable<any> {
+      return this.apollo
+        .query({
+          query: gql`
+            query SearchEmployee($department: String!) {
+              searchEmployee(department: $department) {
+              _id
+              first_name
+              last_name
+              email
+              gender
+              designation
+              salary
+              date_of_joining
+              department
+              employee_photo
+      }
+            }
+          `,
+          variables: {
+            department: department,
+          },
+          context: {
+            uri: this.fullUrl,
+          },
+          fetchPolicy: 'no-cache',
+        })
+        .pipe(map((result: any) => result?.data?.searchEmployee ?? null));
+    }
+}
+      

@@ -9,6 +9,42 @@
       Add Employee
     </button>
   </div>
+
+  <div class="mb-6 grid gap-3 sm:grid-cols-[180px_1fr_auto] sm:items-end">
+    <div>
+      <label for="filterField" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-600">Filter By</label>
+      <select
+        id="filterField"
+        class="block w-full rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-700"
+        [value]="filterField()"
+        (change)="onFilterFieldChange($any($event.target).value)"
+      >
+        <option value="department">Department</option>
+        <option value="designation">Designation</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="searchTerm" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-600">Search Term</label>
+      <input
+        id="searchTerm"
+        type="text"
+        [value]="searchTerm()"
+        (input)="onSearchTermChange($any($event.target).value)"
+        placeholder="Type to filter employees"
+        class="block w-full rounded border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-700"
+      >
+    </div>
+
+    <button
+      type="button"
+      (click)="clearFilters()"
+      class="inline-flex items-center justify-center rounded bg-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-300"
+    >
+      Clear
+    </button>
+  </div>
+
 <table class="min-w-full border-collapse text-left text-sm text-slate-700">
     <thead>
   <tr class="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-600">
