@@ -10,6 +10,17 @@ services:
       - ./backend/.env
     restart: unless-stopped
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: comp3133-frontend
+    ports:
+      - "4200:4200"
+    restart: unless-stopped
+
+    
+
  
 
 
