@@ -25,14 +25,14 @@ export class EditEmployee {
   errorMessage = '';
 
   protected employeeForm = new FormGroup({
-    first_name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    last_name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    first_name: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2), Validators.maxLength(50)] }),
+    last_name: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2), Validators.maxLength(50)] }),
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
-    gender: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    designation: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    gender: new FormControl('Other', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^(Male|Female|Other)$/)] }),
+    designation: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2), Validators.maxLength(50)] }),
     salary: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
     date_of_joining: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    department: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    department: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2), Validators.maxLength(50)] }),
     employee_photo: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.pattern(CLOUDINARY_URL_PATTERN)]

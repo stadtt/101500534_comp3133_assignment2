@@ -11,46 +11,124 @@
             <div class="grid gap-5 md:grid-cols-2">
                 <div>
                     <label for="first_name" class="mb-1 block text-sm font-medium text-slate-700">First Name</label>
-                    <input id="first_name" type="text" formControlName="first_name" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                    <input id="first_name" type="text" formControlName="first_name" minlength="2" maxlength="50" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                    @if (employeeForm.controls.first_name.touched && employeeForm.controls.first_name.errors) {
+                        <div class="mt-1 text-sm text-red-600">
+                            @if (employeeForm.controls.first_name.hasError('required')) {
+                                First name is required.
+                            }
+                            @if (employeeForm.controls.first_name.hasError('minlength')) {
+                                First name must be at least 2 characters.
+                            }
+                            @if (employeeForm.controls.first_name.hasError('maxlength')) {
+                                First name must be 50 characters or fewer.
+                            }
+                        </div>
+                    }
                 </div>
 
                 <div>
                     <label for="last_name" class="mb-1 block text-sm font-medium text-slate-700">Last Name</label>
-                    <input id="last_name" type="text" formControlName="last_name" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                    <input id="last_name" type="text" formControlName="last_name" minlength="2" maxlength="50" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                    @if (employeeForm.controls.last_name.touched && employeeForm.controls.last_name.errors) {
+                        <div class="mt-1 text-sm text-red-600">
+                            @if (employeeForm.controls.last_name.hasError('required')) {
+                                Last name is required.
+                            }
+                            @if (employeeForm.controls.last_name.hasError('minlength')) {
+                                Last name must be at least 2 characters.
+                            }
+                            @if (employeeForm.controls.last_name.hasError('maxlength')) {
+                                Last name must be 50 characters or fewer.
+                            }
+                        </div>
+                    }
                 </div>
             </div>
 
             <div>
                 <label for="email" class="mb-1 block text-sm font-medium text-slate-700">Email</label>
                 <input id="email" type="email" formControlName="email" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                @if (employeeForm.controls.email.touched && employeeForm.controls.email.errors) {
+                    <div class="mt-1 text-sm text-red-600">
+                        @if (employeeForm.controls.email.hasError('required')) {
+                            Email is required.
+                        }
+                        @if (employeeForm.controls.email.hasError('email')) {
+                            Enter a valid email address.
+                        }
+                    </div>
+                }
             </div>
 
             <div class="grid gap-5 md:grid-cols-2">
                 <div>
                     <label for="gender" class="mb-1 block text-sm font-medium text-slate-700">Gender</label>
                     <select id="gender" formControlName="gender" class="block w-full rounded border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
-                        <option value="">Select Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
                     </select>
+                    @if (employeeForm.controls.gender.touched && employeeForm.controls.gender.errors) {
+                        <div class="mt-1 text-sm text-red-600">
+                            @if (employeeForm.controls.gender.hasError('required') || employeeForm.controls.gender.hasError('pattern')) {
+                                Select a valid gender.
+                            }
+                        </div>
+                    }
                 </div>
 
                 <div>
                     <label for="salary" class="mb-1 block text-sm font-medium text-slate-700">Salary</label>
-                    <input id="salary" type="number" formControlName="salary" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                    <input id="salary" type="number" min="0" formControlName="salary" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                    @if (employeeForm.controls.salary.touched && employeeForm.controls.salary.errors) {
+                        <div class="mt-1 text-sm text-red-600">
+                            @if (employeeForm.controls.salary.hasError('required')) {
+                                Salary is required.
+                            }
+                            @if (employeeForm.controls.salary.hasError('min')) {
+                                Salary cannot be negative.
+                            }
+                        </div>
+                    }
                 </div>
             </div>
 
             <div class="grid gap-5 md:grid-cols-2">
                 <div>
                     <label for="designation" class="mb-1 block text-sm font-medium text-slate-700">Designation</label>
-                    <input id="designation" type="text" formControlName="designation" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                    <input id="designation" type="text" formControlName="designation" minlength="2" maxlength="50" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                    @if (employeeForm.controls.designation.touched && employeeForm.controls.designation.errors) {
+                        <div class="mt-1 text-sm text-red-600">
+                            @if (employeeForm.controls.designation.hasError('required')) {
+                                Designation is required.
+                            }
+                            @if (employeeForm.controls.designation.hasError('minlength')) {
+                                Designation must be at least 2 characters.
+                            }
+                            @if (employeeForm.controls.designation.hasError('maxlength')) {
+                                Designation must be 50 characters or fewer.
+                            }
+                        </div>
+                    }
                 </div>
 
                 <div>
                     <label for="department" class="mb-1 block text-sm font-medium text-slate-700">Department</label>
-                    <input id="department" type="text" formControlName="department" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                    <input id="department" type="text" formControlName="department" minlength="2" maxlength="50" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                    @if (employeeForm.controls.department.touched && employeeForm.controls.department.errors) {
+                        <div class="mt-1 text-sm text-red-600">
+                            @if (employeeForm.controls.department.hasError('required')) {
+                                Department is required.
+                            }
+                            @if (employeeForm.controls.department.hasError('minlength')) {
+                                Department must be at least 2 characters.
+                            }
+                            @if (employeeForm.controls.department.hasError('maxlength')) {
+                                Department must be 50 characters or fewer.
+                            }
+                        </div>
+                    }
                 </div>
             </div>
 
@@ -58,6 +136,9 @@
                 <div>
                     <label for="date_of_joining" class="mb-1 block text-sm font-medium text-slate-700">Date of Joining</label>
                     <input id="date_of_joining" type="date" formControlName="date_of_joining" class="block w-full rounded border border-slate-300 px-3 py-2 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100" required>
+                    @if (employeeForm.controls.date_of_joining.touched && employeeForm.controls.date_of_joining.hasError('required')) {
+                        <div class="mt-1 text-sm text-red-600">Date of joining is required.</div>
+                    }
                 </div>
 
                 <div>
